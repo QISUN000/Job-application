@@ -1,6 +1,7 @@
 package com.example.jobapplication.Job.impl;
 
 import com.example.jobapplication.Job.Job;
+import com.example.jobapplication.Job.JobRepository;
 import com.example.jobapplication.Job.JobService;
 import org.springframework.stereotype.Service;
 
@@ -10,23 +11,29 @@ import java.util.List;
 
 @Service
 public class JobServiceImpl implements JobService {
-    private List<Job> jobs = new ArrayList<Job>();
+//    private List<Job> jobs = new ArrayList<Job>();
+    JobRepository jobRepository;
+
+    public JobServiceImpl(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
+    }
+
     private long nextId = 1L;
 
     @Override
     public List<Job> findAll() {
-        return jobs;
+        return jobRepository.findAll();
     }
 
     @Override
     public void createJob(Job job) {
         job.setId(nextId++);
-        jobs.add(job);
+        jobRepository.save(job);
     }
 
     @Override
     public Job findById(long id) {
-        for (Job job : jobs) {
+        for (Job job : jobRepository.findAll()) {
             if (job.getId() == id) {
                 return job;
             }
